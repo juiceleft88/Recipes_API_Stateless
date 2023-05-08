@@ -1,0 +1,17 @@
+{
+  "name": "recipes_api_stateless",
+  "version": "1.0.0",
+  "description": "A server application for interacting with the recipes from TheMealDb",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Hugo Izquierdo",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongo": "^0.1.0",
+    "nodemon": "^2.0.22",
+    "recipe_api": "file:recipe_api"
+  }
+}
