@@ -43,15 +43,35 @@ const mongo = () => {
      * @return {Object or Array}         the card object by deck id or all results
      */
     
-    async function find(collectionName, deckIdentifier) {
+    async function find(collectionName, idMeal) {
         try {
             const collection = db.collection(collectionName);
 
-            if (deckIdentifier) {
-                return await collection.find({ deckId: deckIdentifier }).next();
+            if (idMeal) {
+                return await collection.find({ id: idMeal }).next();
             } else {
                 return await collection.find({}).toArray();
             }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    async function findSearchTerm(collectionName, term) {
+        try {
+            const collection = db.collection(collectionName);
+            let count = 0;
+
+            if(term) {
+                console.log('Item has been searched for already');
+                return await collection.findSearchTerm({lastSearched: new Date()}).next();
+            } else {
+                return await collection.findSearchTerm({
+                    searchTerm: term,
+                    searchCount: count+1,
+                    lastSearched: 0}).toArray();
+            }
+
         } catch (error) {
             console.log(error);
         }
@@ -63,12 +83,12 @@ const mongo = () => {
      * @param {Object} deckIdentifier    deckId to query
      * @param {Object} data              data to update into mongo collection
      */
-    async function update(collectionName, deckIdentifier, data) {
+    async function update(collectionName, idMeal, data) {
         try {
             const collection = db.collection(collectionName);
 
             await collection.updateOne(
-                { deckId: deckIdentifier },
+                { id: idMeal },
                 { $set: data }
             );
         } catch (error) {
@@ -80,7 +100,8 @@ const mongo = () => {
         connect,
         save,
         find,
-        update
+        update,
+        findSearchTerm
     };
 };
 
