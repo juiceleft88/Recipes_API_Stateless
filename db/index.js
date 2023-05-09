@@ -43,7 +43,7 @@ const mongo = () => {
      * @return {Object or Array}         the card object by deck id or all results
      */
     
-    async function find(collectionName, idMeal) {
+    /*     async function find(collectionName, idMeal) {
         try {
             const collection = db.collection(collectionName);
 
@@ -55,21 +55,16 @@ const mongo = () => {
         } catch (error) {
             console.log(error);
         }
-    }
+    } */
 
-    async function findSearchTerm(collectionName, term) {
+    async function find(collectionName, term) {
         try {
             const collection = db.collection(collectionName);
-            let count = 0;
 
             if(term) {
-                console.log('Item has been searched for already');
-                return await collection.findSearchTerm({lastSearched: new Date()}).next();
+                return await collection.find({searchTerm : term}).next();
             } else {
-                return await collection.findSearchTerm({
-                    searchTerm: term,
-                    searchCount: count+1,
-                    lastSearched: 0}).toArray();
+                return await collection.find({}).toArray();
             }
 
         } catch (error) {
@@ -80,15 +75,16 @@ const mongo = () => {
     /**
      * @description                      performs an update on a mongo collection by deckId
      * @param {String} collectionName    name of a collection in mongo
-     * @param {Object} deckIdentifier    deckId to query
+     * @param {Object} term              searchTerm to query
      * @param {Object} data              data to update into mongo collection
      */
-    async function update(collectionName, idMeal, data) {
+    async function update(collectionName, term, data) {
         try {
             const collection = db.collection(collectionName);
 
+            //using the 'searchTerm' filter, and the $set key for the new data (allows it to replace current data)
             await collection.updateOne(
-                { id: idMeal },
+                { searchTerm: term },
                 { $set: data }
             );
         } catch (error) {
@@ -100,8 +96,7 @@ const mongo = () => {
         connect,
         save,
         find,
-        update,
-        findSearchTerm
+        update
     };
 };
 
