@@ -37,10 +37,10 @@ const mongo = () => {
     }
 
     /**
-     * @description                      performs a query on a mongo collection by deckId
+     * @description                      performs a query on a mongo collection by recipe ID
      * @param {String} collectionName    name of a collection in mongo
-     * @param {Object} deckIdentifier    deckId to query
-     * @return {Object or Array}         the card object by deck id or all results
+     * @param {Object} deckIdentifier    recipe id to query
+     * @return {Object or Array}         the recipe object by id or all results
      */
     
     /*     async function find(collectionName, idMeal) {
@@ -73,7 +73,7 @@ const mongo = () => {
     }
 
     /**
-     * @description                      performs an update on a mongo collection by deckId
+     * @description                      performs an update on a mongo collection by recipe id
      * @param {String} collectionName    name of a collection in mongo
      * @param {Object} term              searchTerm to query
      * @param {Object} data              data to update into mongo collection

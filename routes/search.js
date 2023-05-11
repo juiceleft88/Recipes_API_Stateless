@@ -29,15 +29,16 @@ router.get('/', async (req, res) => {
 
         //assigning the value of the find method results to 'exist'. If an item is not found in db, returns 'null'. If an item is found, returns array with all the entries.
         const exists = await database.find('Results', queryResults.searchTerm);
-        //console.log(exists);
 
-        let count = 1;
+        const resultsLength = queryResults.results.length; //variable to hold the results array length in order to use in searchCount
+
+
         //just a reminder, the queryResults is not being stored in database, just the search object..so not the whole recipes list. Thats just being shown to user.
         if (exists === null){ //if the current search term not found in database, then do the following:
             console.log('nothing was found');
             const search = { //create an object with the following search values
                 searchTerm : queryResults.searchTerm, //the actual search term
-                searchCount : count, //the amount of times term has been searched for. Inititalizes to '1', then after this would execute the count+1 in the else block after each search
+                searchCount : resultsLength, //the amount of times term has been searched for. Inititalizes to '1', then after this would execute the count+1 in the else block after each search
                 lastSearched : new Date() //creates a timestamp for when the term was searched
             };
             database.save('Results', {...search}); //saves this first entry to the database
@@ -45,14 +46,65 @@ router.get('/', async (req, res) => {
         } else {
             console.log('Search term is already in the database');
             database.update('Results', queryResults.searchTerm, { //if search term is already stored in database, run the 'update' function for the following changes:
-                searchCount: count+1, //update the searchcount by 1 each time time a repeated term in searched
+                searchCount: resultsLength, //update the searchcount by 1 each time time a repeated term in searched
                 lastSearched: new Date() //update to a new timestamp
             });
+            
         }
         
     } catch (error) {
         res.status(500).json(error.toString());
     }
+});
+
+router.get('/:id/details', async (req, res) => {
+    try{
+
+        const { query, params } = req;
+        const { id } = params;
+        const { category } = query;
+
+        const recipeDetail = await recipes.getRecipe(id);
+        const queryResults = recipeDetail;
+        const queryCategory = queryResults[0].strCategory;
+       
+        //checking to see if the category exists in our database, and if so returning that entry
+        const exists = await database.find('Results', queryCategory);
+
+        //if the key 'selections' does not exist in the searchTerm entry, then add it as an array of
+        //objects, with the first entry being the current specific searched recipeId. Creates the fields
+        //by accessing the exists object, then pushing the new object key/value pair to the selections
+        //array as it's value. 
+        if('selections' in exists === false){
+            console.log('no previous selections stored, adding it now');
+            exists.selections = [{
+                id : queryResults[0].idMeal,
+                display: queryResults[0].strMeal //this can be changed to just show all recipe info by using queryResults[0]
+            }]; 
+            exists.selections.push;
+            database.update('Results', queryCategory, {...exists}); //updates the seacrhTerm entry with the new information
+
+            //if the 'selections' key does exist in the searchTerm entry already, then we will simply create
+            //a new object with the same 'id' and 'display' attributes, then push this object to the already created 
+            //'selections' array. Then we update the database with this new information.
+        } else if('selections' in exists === true) {
+            console.log('selection keyword already exists, just updating');
+            const selection = {
+                id : queryResults[0].idMeal,
+                display: queryResults[0].strMeal
+            }; 
+            exists.selections.push(selection);
+            database.update('Results', queryCategory, {...exists});
+        }
+
+        res.json(queryResults); //outputting the recipe information to the 
+
+
+    } catch (error) {
+        res.status(500).json(error.toString());
+    }
+
+
 });
 
 module.exports = router;
