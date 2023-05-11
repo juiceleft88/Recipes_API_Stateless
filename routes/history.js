@@ -1,4 +1,4 @@
-const router = require('express').Router();
+const router = require('express').Router(); //using the router from express to create a GET endpoint
 
 const database = require('../db');
 
@@ -6,10 +6,12 @@ const database = require('../db');
  * @api {GET} /results              get all recipes from database
  * @apiExample                      localhost:8888/results
  */
+
+//Endpoint for the 'history' endpoint
 router.get('/', async (req, res) => {
     try {
-        const { query } = req;
-        const { category } = query;
+        const { query } = req; //destructuring the req to extract query
+        const { category } = query; //destructuring query to category
 
         //finding the results for both all the findings in db, and for the specific case  using query of category
         const exists = await database.find('Results', category);

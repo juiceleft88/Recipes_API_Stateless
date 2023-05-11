@@ -39,28 +39,16 @@ const mongo = () => {
     /**
      * @description                      performs a query on a mongo collection by recipe ID
      * @param {String} collectionName    name of a collection in mongo
-     * @param {Object} deckIdentifier    recipe id to query
+     * @param {Object} recipe entry      recipe id to query
      * @return {Object or Array}         the recipe object by id or all results
      */
     
-    /*     async function find(collectionName, idMeal) {
+    
+    async function find(collectionName, term) { //helper function to find an entry within a collection by searchterm (category)
         try {
             const collection = db.collection(collectionName);
 
-            if (idMeal) {
-                return await collection.find({ id: idMeal }).next();
-            } else {
-                return await collection.find({}).toArray();
-            }
-        } catch (error) {
-            console.log(error);
-        }
-    } */
-
-    async function find(collectionName, term) {
-        try {
-            const collection = db.collection(collectionName);
-
+            //if the term is within the collection, return the entry object, else return all objects
             if(term) {
                 return await collection.find({searchTerm : term}).next();
             } else {

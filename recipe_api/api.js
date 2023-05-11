@@ -1,14 +1,13 @@
-//This file serves as the logic to our custom module, recipe_api
+//This file serves as the logic to the custom module, recipe_api
 
-
+//using superagent to make http connections
 const superagent = require('superagent');
 
+//creating a shorthand of the base URL to use i nthe functions and not have to retype
 const base = 'https://www.themealdb.com/api/json';
-//www.themealdb.com/api/json/v1/1/search.php?s=Arrabiata
-//www.themealdb.com/api/json/v1/1/lookup.php?i
 
 
-
+//functions to get individual recipe from the API by the recipe ID
 const getRecipe = async (recipeId) => {
     try {
         const recipeURL = `${base}/v1/1/lookup.php?i=${recipeId}`;
@@ -21,12 +20,13 @@ const getRecipe = async (recipeId) => {
     }
 };
 
+//functions to get recipe category from the API by specifying a recipe category as a string
 const getCategory = async (category) => {
     try {
         const categoryURL = `${base}/v1/1/filter.php?c=${category}`;
         
         const res = await superagent.get(categoryURL);
-        //console.log(res.body);
+
         return res.body;
     
     } catch (error) {
