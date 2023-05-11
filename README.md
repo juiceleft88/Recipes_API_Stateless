@@ -5,9 +5,11 @@ A stateless server using Javascript and Node.js to interact with a meal recipes 
 In this program, I am evolving a previous command-line-interface program that worked with an API called TheMealDB to allow for browsing and selecting recipes through the command line, into a Stateless Express.js Server Application. To do this, I have employed my knowledge of Node.js servers including routing, Node Modules, and Database integration through MongoDB. My Server Application makes use of a custom node module that I created from the logic of my previous CLI program, in order to interact with TheMealDB API, and also connects to Mongo Atlas Cloud Database to store data.
 
 ### Technologies used to test and run:
--**Postman** - to help in visualizing my endpoint logic and responses, as well as header data
--**MongoDB** - To store the search history objects, and retrieve them (to show in browser in /history endpoint)
--**Nodemon** - Command line tool which monitors project directory and automatically restarts the node application when it detects any changes. Major time-saver to keep server running after changes in program.  
+- **Postman** - to help in visualizing my endpoint logic and responses, as well as header data
+
+- **MongoDB** - To store the search history objects, and retrieve them (to show in browser in /history endpoint)
+
+- **Nodemon** - Command line tool which monitors project directory and automatically restarts the node application when it detects any changes. Major time-saver to keep server running after changes in program.  
 
 ## Parts of my program:
 
